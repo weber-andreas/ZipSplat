@@ -20,6 +20,7 @@ import io
 import json
 import math
 import tarfile
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -225,6 +226,19 @@ def read_scenes_from_tar(path: str) -> list[dict]:
                 groups[key] = {"images": {}, "depths": {}}
             _parse_tar_entry(member.name, tar.extractfile(member).read(), groups[key])
     return [{"key": k, **v} for k, v in groups.items()]
+
+
+def peek_has_depth(shard_path: Path) -> bool:
+    """Return has_depth from the first scene's meta.json in a tar shard.
+
+    Reads only the first .meta.json entry; does not load any image data.
+    Raises if the shard does not exist, cannot be read, or contains no meta.json.
+    """
+    with tarfile.open(str(shard_path), "r") as tar:
+        for member in tar:
+            if member.name.endswith(".meta.json"):
+                return json.loads(tar.extractfile(member).read()).get("has_depth", False)
+    raise ValueError(f"No .meta.json entry found in {shard_path}")
 
 
 def iter_scenes_from_tar(path: str):

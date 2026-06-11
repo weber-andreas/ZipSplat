@@ -82,6 +82,14 @@ class MultiViewDataset(BaseDataset, IterableDataset):
         if not self.shard_paths:
             raise FileNotFoundError(f"No shards found in {shard_dir}")
         logger.info(f"[{split}] Found {len(self.shard_paths)} shards in {shard_dir}")
+        if io.peek_has_depth(self.shard_paths[0]) is False:
+            logger.warning(
+                "No depth in %s (has_depth=False). "
+                "Run extract_depth if the model requires it: "
+                "python -m splatfactory.datasets.scripts.extract_depth %s",
+                self.shard_paths[0].name,
+                shard_dir,
+            )
 
         self.view_sampler = get_view_sampler(conf.view_sampler.name)(conf.view_sampler, split=split)
 

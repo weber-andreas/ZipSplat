@@ -90,8 +90,8 @@ class Camera(TensorWrapper):
         cx, cy = new_K[..., 0, 2], new_K[..., 1, 2]
 
         t = new_t_img.to(self.data_)
-        w = self.w * t[..., 0, 0] + 2 * t[..., 0, 2]
-        h = self.h * t[..., 1, 1] + 2 * t[..., 1, 2]
+        w = self.size[..., 0] * t[..., 0, 0] + 2 * t[..., 0, 2]
+        h = self.size[..., 1] * t[..., 1, 1] + 2 * t[..., 1, 2]
         newdata_ = torch.stack([w, h, fx, fy, cx, cy], -1)
 
         alldata_ = torch.cat([newdata_, self.dist], -1)

@@ -108,7 +108,7 @@ def resize_scene(scene: dict, target_size: int) -> dict:
 
 def _iter_input_scenes(input_dir: Path):
     """Stream scenes from all shards in a directory, in order."""
-    for shard in sorted(input_dir.glob("shard-*.tar")):
+    for shard in sorted(input_dir.glob("*.tar")):
         yield from iter_scenes_from_tar(str(shard))
 
 

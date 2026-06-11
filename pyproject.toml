@@ -45,3 +45,10 @@ max-line-length = 100
 docstring-convention = "google"
 ignore = ["E203", "W503", "E402"]
 exclude = [".git", "__pycache__", "venv", "docs", "third_party", "scripts"]
+
+[tool.pylint.messages_control]
+disable = [
+    "W1202", # logging-format-interpolation
+    "W1203" # logging-fstring-interpolation
+]
+

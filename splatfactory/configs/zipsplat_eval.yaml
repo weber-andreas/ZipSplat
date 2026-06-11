@@ -8,5 +8,6 @@ defaults:
 model:
   weights: zipsplat  # full released model (backbone included), auto-downloaded from Hugging Face
   skip_head_render: true
+  return_attention: false  # disable storing [B,24,N_q,N_c] for all Cross-Attention layers to prevent OOM
   backbone:
     weights: null  # skip the DA3 training-init weights; the released checkpoint provides them

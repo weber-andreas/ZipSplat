@@ -113,7 +113,12 @@ class TensorWrapper(TensorClass, tensor_only=True):
 
         # Handle torch.stack for tensordict 0.9.0 compatibility
         if func.__name__ == "stack" and args and isinstance(args[0], list):
-            if hasattr(args[0][0], "_tensordict"):
+            # Check before _tensordict branch: TensorClass instances also have _tensordict.
+            if all(isinstance(x, cls) for x in args[0]):
+                data_list = [x.data_ for x in args[0]]
+                result_data = torch.stack(data_list, *args[1:], **(kwargs or {}))
+                return cls(result_data)
+            if args[0] and hasattr(args[0][0], "_tensordict"):
                 from tensordict import stack as td_stack
 
                 return td_stack(args[0], *args[1:], **(kwargs or {}))

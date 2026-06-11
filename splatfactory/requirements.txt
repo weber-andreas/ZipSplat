@@ -28,3 +28,4 @@ tensordict
 wandb
 huggingface-hub
 pillow
+depth-anything-3 @ git+https://github.com/bytedance-seed/depth-anything-3.git
